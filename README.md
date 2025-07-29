@@ -44,27 +44,23 @@ Hosted on **Render** with:
 
 autoresume/
 │
-├── backend/                          # FastAPI backend logic
-│   ├── api.py                        # Main FastAPI app
-│   ├── requirements.txt              # Backend dependencies
-│   └── start.sh                      # Startup script for deployment
+├── backend/                        
+│   ├── api.py                        
+│   ├── requirements.txt              
+│   └── start.sh                      
 │
-├── streamlit_ui/                    # Streamlit frontend interface
-│   ├── app.py                        # Main Streamlit app
-│   ├── resume_parser.py              # Resume parsing logic
-│   ├── jd_parser.py                  # JD parsing logic
-│   ├── skill_matcher.py              # Matching and scoring
-│   ├── visualizer.py                 # Matplotlib/Plotly charts
-│   ├── recommender.py                # Course recommendations
-│   ├── requirements.txt              # Frontend dependencies
-│   └── utils/                        # Helper functions, shared logic
+├── streamlit_ui/                    
+│   ├── app.py                        
+│   ├── resume_parser.py              
+│   ├── jd_parser.py                  
+│   ├── skill_matcher.py              
+│   ├── visualizer.py                 
+│   ├── recommender.py                
+│   ├── requirements.txt              
+│   └── utils/                        
 │
-├── Dockerfile.backend                # Dockerfile for backend
-├── Dockerfile.frontend               # Dockerfile for frontend
-├── docker-compose.yml                # For multi-container setup
-│
-├── .gitignore                        # Git ignored files
-├── README.md                         # Project overview and documentation
+├── .gitignore                       
+├── README.md                         
 
 
 
