@@ -43,7 +43,6 @@ Hosted on **Render** with:
 ## 📁 Project Structure
 
 autoresume/
-
 │
 ├── backend/                        
 │   ├── api.py                        
