@@ -65,9 +65,9 @@ autoresume/
 
 ##  📦 Future Enhancements
 
-GPT-4-based skill matcher
-Auto-JD parsing from LinkedIn URLs
-Graphical Dashboard (Plotly + Streamlit Charts)
+- GPT-4-based skill matcher
+- Auto-JD parsing from LinkedIn URLs
+- Graphical Dashboard (Plotly + Streamlit Charts)
 
 
 
