@@ -60,7 +60,9 @@ autoresume/
 │   └── utils/                        
 │
 ├── .gitignore                       
-├── README.md                         
+├── README.md       
+
+---
 
 
 ##  📦 Future Enhancements
