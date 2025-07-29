@@ -1,0 +1,1 @@
+We are hiring a Python Developer with 2–4 years of experience. Required skills: Python, SQL, Pandas, REST APIs, and familiarity with machine learning libraries like scikit-learn. Knowledge of cloud platforms (AWS/GCP) is a plus.

@@ -1,0 +1,35 @@
+{
+  "match_score_percent": 47.06,
+  "matched_skills": [
+    "python",
+    "sql"
+  ],
+  "missing_skills": [
+    "scikit-learn",
+    "pandas",
+    "aws",
+    "gcp",
+    "machine learning"
+  ],
+  "suggested_courses": {
+    "scikit-learn": "https://scikit-learn.org/stable/tutorial/basic/tutorial.html",
+    "pandas": "https://pandas.pydata.org/docs/getting_started/index.html",
+    "aws": "https://www.coursera.org/learn/aws-fundamentals",
+    "gcp": "https://www.cloudskillsboost.google/",
+    "machine learning": "https://www.coursera.org/learn/machine-learning"
+  },
+  "resume_skills": [
+    "java",
+    "python",
+    "sql"
+  ],
+  "jd_skills": [
+    "scikit-learn",
+    "python",
+    "pandas",
+    "aws",
+    "gcp",
+    "machine learning",
+    "sql"
+  ]
+}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AutoResume Matcher</title>
+  
+</head>
+<body>
+  <h1>AutoResume</h1>
+
+  <form id="uploadResumeForm">
+    <label>Upload Resume (PDF):</label>
+    <input type="file" id="resumeFile" accept=".pdf" required>
+    <button type="submit">Upload Resume</button>
+  </form>
+
+  <form id="uploadJDForm">
+    <label>Upload Job Description (TXT):</label>
+    <input type="file" id="jdFile" accept=".txt" required>
+    <button type="submit">Upload JD</button>
+  </form>
+
+  <button id="matchBtn" onclick="matchFiles()">Match Resume & JD</button>
+
+
+  <pre id="output"></pre>
+
+  <script>
+    let resumePath = "";
+    let jdPath = "";
+
+    document.getElementById('uploadResumeForm').onsubmit = async function (e) {
+      e.preventDefault();
+      const file = document.getElementById('resumeFile').files[0];
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("http://127.0.0.1:8000/upload-resume/", {
+        method: "POST",
+        body: formData
+      });
+      resumePath = "temp_resumes/" + file.name;
+      const data = await res.json();
+      resumePath=data.path;
+      document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+    };
+
+    document.getElementById('uploadJDForm').onsubmit = async function (e) {
+      e.preventDefault();
+      const file = document.getElementById('jdFile').files[0];
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("http://127.0.0.1:8000/upload-jd/", {
+        method: "POST",
+        body: formData
+      });
+      jdPath = "temp_jobs/" + file.name;
+      const data = await res.json();
+      jdPath=data.path;
+      document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+    };
+
+    async function matchFiles() {
+      const res = await fetch("http://127.0.0.1:8000/match/?resume_path=" + resumePath + "&jd_path=" + jdPath, {
+        method: "POST"
+      });
+      const data = await res.json();
+      document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+      
+
+    }
+  </script>
+</body>
+</html>

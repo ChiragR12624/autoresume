@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AutoResume Matcher</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .section {
+      margin-bottom: 2rem;
+    }
+    form, button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    input[type="file"] {
+      margin-bottom: 1rem;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background-color: #bdc3c7;
+      cursor: not-allowed;
+    }
+    pre {
+      background-color: #eef;
+      padding: 1rem;
+      white-space: pre-wrap;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AutoResume Matcher</h1>
+
+    <div class="section">
+      <h2>Upload Resume (PDF)</h2>
+      <form id="uploadResumeForm">
+        <input type="file" id="resumeFile" accept=".pdf" required />
+        <button type="submit">Upload Resume</button>
+      </form>
+    </div>
+
+    <div class="section">
+      <h2>Upload Job Description (TXT)</h2>
+      <form id="uploadJDForm">
+        <input type="file" id="jdFile" accept=".txt" required />
+        <button type="submit">Upload JD</button>
+      </form>
+    </div>
+
+    <div class="section">
+      <h2>Match Results</h2>
+      <button id="matchBtn" disabled>Match Resume & JD</button>
+      <pre id="output">Result will appear here.</pre>
+    </div>
+  </div>
+
+  <script>
+    let resumePath = "";
+    let jdPath = "";
+
+    // Upload Resume
+    document.getElementById('uploadResumeForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const file = document.getElementById('resumeFile').files[0];
+      if (!file) return alert("Please upload a PDF resume.");
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const res = await fetch("http://127.0.0.1:8000/upload-resume/", {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+        console.log("Resume upload response:", data);
+        if (data.path) {
+          resumePath = data.path.trim();
+          document.getElementById('output').innerText = "✅ Resume uploaded successfully.";
+          checkEnableMatch();
+        } else {
+          document.getElementById('output').innerText = "❌ Resume uploaded, but path not returned.";
+        }
+      } catch (err) {
+        alert("❌ Failed to upload resume.");
+        console.error(err);
+      }
+    });
+
+    // Upload Job Description
+    document.getElementById('uploadJDForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const file = document.getElementById('jdFile').files[0];
+      if (!file) return alert("Please upload a TXT job description.");
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const res = await fetch("http://127.0.0.1:8000/upload-jd/", {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+        console.log("JD upload response:", data);
+        if (data.path) {
+          jdPath = data.path.trim();
+          document.getElementById('output').innerText = "✅ JD uploaded successfully.";
+          checkEnableMatch();
+        } else {
+          document.getElementById('output').innerText = "❌ JD uploaded, but path not returned.";
+        }
+      } catch (err) {
+        alert("❌ Failed to upload JD.");
+        console.error(err);
+      }
+    });
+
+    // Enable Match button only if both files uploaded
+    function checkEnableMatch() {
+      const matchBtn = document.getElementById("matchBtn");
+      if (resumePath && jdPath) {
+        matchBtn.disabled = false;
+        console.log("✅ Match button enabled");
+      } else {
+        matchBtn.disabled = true;
+      }
+      console.log("Resume Path:", resumePath);
+      console.log("JD Path:", jdPath);
+    }
+
+    // Match button click handler
+    document.getElementById("matchBtn").addEventListener("click", async function () {
+      if (!resumePath || !jdPath) {
+        alert("Upload both resume and job description before matching.");
+        return;
+      }
+
+      const url = `http://127.0.0.1:8000/match/?resume_path=${encodeURIComponent(resumePath)}&jd_path=${encodeURIComponent(jdPath)}`;
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        console.log("Match API response:", data);
+
+        if (!data.match_score) {
+          document.getElementById('output').innerText = "⚠️ No match score in response.";
+          return;
+        }
+
+        const output = `
+🎯 Match Score: ${data.match_score}%
+
+✅ Matched Skills:
+- ${data.matched_skills.join("\n- ")}
+
+❌ Missing Skills:
+- ${data.missing_skills.join("\n- ")}
+        `;
+        document.getElementById('output').innerText = output;
+      } catch (err) {
+        document.getElementById('output').innerText = "❌ Failed to fetch match result.";
+        console.error("Error in match API:", err);
+      }
+    });
+  </script>
+</body>
+</html>

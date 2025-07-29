@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AutoResume Matcher</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    label, h1 { font-weight: bold; }
+    #output { margin-top: 20px; border: 1px solid #ccc; padding: 10px; border-radius: 8px; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h1>AutoResume</h1>
+
+  <form id="uploadResumeForm">
+    <label>Upload Resume (PDF):</label>
+    <input type="file" id="resumeFile" accept=".pdf" required>
+    <button type="submit">Upload Resume</button>
+  </form>
+
+  <br>
+
+  <form id="uploadJDForm">
+    <label>Upload Job Description (TXT):</label>
+    <input type="file" id="jdFile" accept=".txt" required>
+    <button type="submit">Upload JD</button>
+  </form>
+
+  <br>
+
+  <button onclick="matchFiles()">Match Resume & JD</button>
+
+  <div id="output"></div>
+
+  <script>
+    let resumePath = "";
+    let jdPath = "";
+
+    // Upload Resume
+    document.getElementById('uploadResumeForm').onsubmit = async function (e) {
+      e.preventDefault();
+      const file = document.getElementById('resumeFile').files[0];
+      if (!file) return;
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("http://127.0.0.1:8000/upload-resume/", {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+      console.log("Resume Path Set:", data.path);
+      resumePath = data.path;
+      document.getElementById('output').innerHTML = `<p>✅ Resume uploaded successfully.</p>`;
+    };
+
+    // Upload JD
+    document.getElementById('uploadJDForm').onsubmit = async function (e) {
+      e.preventDefault();
+      const file = document.getElementById('jdFile').files[0];
+      if (!file) return;
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("http://127.0.0.1:8000/upload-jd/", {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+      console.log("JD Path Set:", data.path);
+      jdPath = data.path;
+      document.getElementById('output').innerHTML = `<p>✅ JD uploaded successfully.</p>`;
+    };
+
+    // Match Resume and JD
+    async function matchFiles() {
+      const outputDiv = document.getElementById('output');
+
+      if (!resumePath || !jdPath) {
+        outputDiv.innerHTML = `<p class="error">❌ Please upload both files first.</p>`;
+        return;
+      }
+
+      outputDiv.innerHTML = `<p>⏳ Matching...</p>`;
+
+      const res = await fetch("http://127.0.0.1:8000/match/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resume_path: resumePath, jd_path: jdPath })
+      });
+
+      const data = await res.json();
+
+      // Display in user-friendly format
+      outputDiv.innerHTML = `
+        <h3>✅ Match Result</h3>
+        <p><strong>Skill Match Score:</strong> ${data.match_score}%</p>
+        <p><strong>Matched Skills:</strong> ${data.matched_skills.join(", ")}</p>
+        <p><strong>Missing Skills:</strong> ${data.missing_skills.join(", ")}</p>
+      `;
+    }
+  </script>
+</body>
+</html>
