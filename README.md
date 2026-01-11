@@ -4,19 +4,19 @@ AutoResume is a smart tool that compares resumes with job descriptions using adv
 
 ---
 
-## 🚀 Features
+## Features
 
-- 📄 Upload Resume (PDF)
-- 📋 Paste or Upload Job Description
-- ✅ Skill Matching Score
-- ❌ Missing Skills Identification
-- 🎓 Course Recommendations
-- 📊 Skill Visualizations (Matplotlib & Plotly)
-- 📥 Export Feedback as PDF
+-  Upload Resume (PDF)
+-  Paste or Upload Job Description
+-  Skill Matching Score
+-  Missing Skills Identification
+-  Course Recommendations
+-  Skill Visualizations (Matplotlib & Plotly)
+-  Export Feedback as PDF
 
 ---
 
-## 🧠 Tech Stack
+## Tech Stack
 
 ### Backend (FastAPI)
 - FastAPI
@@ -32,15 +32,15 @@ AutoResume is a smart tool that compares resumes with job descriptions using adv
 
 ---
 
-## 🌐 Deployment
+## Deployment
 
 Hosted on **Render** with:
-- ⚙️ FastAPI Backend deployed independently
-- 🖥️ Streamlit Frontend served separately
+- FastAPI Backend deployed independently
+- Streamlit Frontend served separately
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 autoresume/
 │
@@ -65,7 +65,7 @@ autoresume/
 ---
 
 
-##  📦 Future Enhancements
+##  Future Enhancements
 
 - GPT-4-based skill matcher
 - Auto-JD parsing from LinkedIn URLs
@@ -75,13 +75,13 @@ autoresume/
 
 ---
 
-## 🛡️ Privacy Notice
+## Privacy Notice
 
 AutoResume runs locally or securely on cloud platforms. Uploaded resumes and job descriptions are **not stored** or shared.
 
 ---
 
-## 📌 Author
+## Author
 
 Chirag Gowda
 
